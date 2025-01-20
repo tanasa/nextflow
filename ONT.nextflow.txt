@@ -1,0 +1,56 @@
+nextflow run epi2me-labs/wf-transcriptomes \
+    --de_analysis \
+    --direct_rna \
+    --fastq 'wf-transcriptomes-demo/differential_expression_fastq' \
+    --minimap2_index_opts "'-k15'" \
+    --ref_annotation 'wf-transcriptomes-demo/gencode.v22.annotation.chr20.gtf' \
+    --ref_genome 'wf-transcriptomes-demo/hg38_chr20.fa' \
+    --sample_sheet 'wf-transcriptomes-demo/sample_sheet.csv' \
+    -profile standard 
+
+nextflow run epi2me-labs/wf-somatic-variation \
+	--snv \
+	--sv \
+	--mod \
+	--sample_name 'MYSAMPLE' \
+	--ref 'wf-somatic-variation-demo/GCA_000001405.15_GRCh38_no_alt_analysis_set_chr20.fna' \
+	--bed 'wf-somatic-variation-demo/demo.bed' \
+	--bam_normal 'wf-somatic-variation-demo/demo_normal.bam' \
+	--bam_tumor 'wf-somatic-variation-demo/demo_tumor.bam' \
+	--override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v3.5.2' \
+	--normal_min_coverage 0 \
+	--tumor_min_coverage 0 \
+	-profile standard 
+
+nextflow run epi2me-labs/wf-pore-c \
+	--bam 'wf-pore-c-demo/porec_test.concatemers.bam' \
+	--chunk_size 100 \
+	--cutter 'NlaIII' \
+	--hi_c \
+	--mcool \
+	--paired_end \
+	--paired_end_maximum_distance 200 \
+	--paired_end_minimum_distance 100 \
+	--phased_vcf 'wf-pore-c-demo/porec_test.phased_variants.vcf.gz' \
+	--ref 'wf-pore-c-demo/porec_test.fasta' \
+	--vcf 'wf-pore-c-demo/porec_test.phased_variants.vcf.gz' \
+	-profile standard 
+
+nextflow run epi2me-labs/wf-single-cell \
+	--expected_cells 100 \
+	--fastq 'wf-single-cell-demo/chr17.fq.gz' \
+	--kit '3prime:v3' \
+	--ref_genome_dir 'wf-single-cell-demo' \
+	--genes_of_interest 'wf-single-cell-demo/umap_plot_genes.csv' \
+	-profile standard 
+
+nextflow run epi2me-labs/wf-human-variation \
+	--bam 'wf-human-variation-demo/demo.bam' \
+	--ref 'wf-human-variation-demo/demo.fasta' \
+	--bed 'wf-human-variation-demo/demo.bed' \
+	--sample_name 'DEMO' \
+	--snp \
+	--sv \
+	--mod \
+	--phased \
+	-profile standard 
